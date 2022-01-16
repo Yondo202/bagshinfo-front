@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import { MenuContext } from '@/miscs/ContextMenuProvider'
+import { MenuContext } from '@/global/ContextMenuProvider'
 import { useContext } from "react";
 import { useRouter } from 'next/router';
 

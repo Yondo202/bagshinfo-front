@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+        "@/components/*": ["components/*"],
+        "@/miscs/*": ["miscs/*"],
+        "@/core/*": ["core/*"],  
+        "@/dynamic/*": ["dynamic/*"],
+
+        "@/global/*": ["global/*"],
+        }
+    }
+}

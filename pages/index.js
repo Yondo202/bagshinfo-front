@@ -1,10 +1,18 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import React from 'react'
+import Root from "@/core/Root"
 
-export default function Home() {
+const Index = () => {
   return (
-    <div >
-        <h2>hahahhah</h2>
-    </div>
+    <Root>
+        dd
+    </Root>
   )
 }
+
+export default Index
+
+
+// export async function getServerSideProps({ params, req }) {
+//   const res = await Axios(process.env.serverUrl + '/home')
+//   return { props: { data: res.data } }
+// }
