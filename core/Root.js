@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import Header from '@/core/Header'
 import Footer from '@/core/Footer'
 
-const Root = () => {
+const Root = ({children}) => {
     return (
         <Body>
             <Header />
-            <h1>hello</h1>
+                {children}
             <Footer />
         </Body>
     )
@@ -16,5 +16,5 @@ const Root = () => {
 export default Root
 
 const Body = styled.div`
-    background-color:red;
+    // background-color:red;
 `
