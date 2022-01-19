@@ -39,8 +39,8 @@ const Parent = styled.div`
 `
 
 const Ghost = styled.div`
-    height: 68px;
-    background-color:#d2d6e2;
+    height: 82px;
+    background-color:${props=>props.theme.background};
 `
 
 const Container = styled.div`
