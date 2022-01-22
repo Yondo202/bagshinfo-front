@@ -1,4 +1,10 @@
 body{
     font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    scroll-behavior: smooth;
     /* font-family: 'Rubik', sans-serif; */
+}
+
+html{
+    scroll-behavior: smooth;
 }

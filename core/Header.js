@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
+import Link from "next/link"
 
 const Header = () => {
     return (
@@ -9,9 +10,14 @@ const Header = () => {
             <Container >
                 <div className="top_menus container">
                     <div className="left_sector ">
-                        <div className="logo_par">
-                            <img src="https://www.toptal.com/toptal-logo.png" alt="bagshinfo_logo" />
-                        </div>
+                        <Link href="/">
+                            <a>
+                                <div className="logo_par">
+                                    <img src="https://www.toptal.com/toptal-logo.png" alt="bagshinfo_logo" />
+                                </div>
+                            </a>
+                        </Link>
+                        
                         <div className="menu_par">
                             <div className="menus">Багш хайх</div>
                             <div className="menus">Сурах бичиг</div>
@@ -20,7 +26,11 @@ const Header = () => {
 
                     <div className="left_sector">
                         <div className="menu_par">
-                            <MainButtonStyle type="button">Нэвтрэх</MainButtonStyle>
+                            <Link href="/auth/user/login">
+                                <a>
+                                    <MainButtonStyle type="button">Нэвтрэх</MainButtonStyle>
+                                </a>
+                            </Link>
                             <div className="menus">Багшаар бүртгүүлэх</div>
                         </div>
                     </div>
@@ -39,7 +49,7 @@ const Parent = styled.div`
 `
 
 const Ghost = styled.div`
-    height: 82px;
+    height: 72px;
     background-color:${props=>props.theme.background};
 `
 
@@ -68,9 +78,11 @@ const Container = styled.div`
                 align-items:center;
                 position:relative;
                 font-weight:${props=>props.theme.weight};
+
                 &:first-child{
                     margin-left: 0px;
                 }
+
                 &:after{
                     content:'';
                     transition:all 0.2s ease;
@@ -79,14 +91,13 @@ const Container = styled.div`
                     position:absolute;
                     bottom:0;
                     left:0;
-                    background-color:${props=>props.theme.mainColor3};
+                    background-color:${props=>props.theme.textColor3};
                     z-index:2;
                 }
                 &:hover{
                     &:after{
                         width:100%;
                     }
-                    // border-bottom:1px solid green;
                 }
             }
         }

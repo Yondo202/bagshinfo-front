@@ -12,7 +12,17 @@ export const MainButtonStyle = styled.button`
     border: none;
     outline: none;
     transition:all 0.2s ease;
+    position:relative;
+    z-index:2;
     &:hover{
         background-color:#05947C;
     }
+`
+
+export const TitleStyle = styled.div`
+    color: ${props=>props.theme.textColor};
+    font-weight: 300;
+    font-size: 30px;
+    text-align:center;
+    margin-bottom:22px;
 `
