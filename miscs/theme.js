@@ -4,11 +4,13 @@ export const fontFamily = `raleway`;
 export const fontFamily2 = `merriweather`;
 
 // export const mainColor = "#334195";
+export const body = '#fff';
 export const mainColor = '#0f256e';
 export const mainColor2 = "#00cc83";
 // export const mainColor3 = "#204ecf"; // todruulsan text ( blue )
 
 export const background = "#d2d6e2";
+export const background2 = "#ebeced";
 
 export const hoverBackground = "#EDF1Fd"
 

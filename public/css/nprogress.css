@@ -48,11 +48,11 @@
   
   #nprogress .spinner-icon {
     background-image: url('/img/spinner.svg');
-    max-width: 6.4rem;
-    max-height: 6.4rem;
-    min-width: 6.4rem;
-    min-height: 6.4rem;
-    margin-left: 6.4rem;
+    max-width: 4rem;
+    max-height: 4rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    margin-left: 4rem;
   
     animation-duration: 1.4s;
     animation-name: tubeRotate;

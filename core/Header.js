@@ -1,13 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState  } from 'react'
 import styled from 'styled-components'
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
 import Link from "next/link"
 
 const Header = () => {
+    const [scrollY, setScrollY] = useState(0);
+
+    function logit() {
+        setScrollY(window.pageYOffset);
+    }
+    useEffect(() => {
+        function watchScroll() {
+        window.addEventListener("scroll", logit);
+        }
+        watchScroll();
+        return () => {
+        window.removeEventListener("scroll", logit);
+        };
+    }, []);
+
+
     return (
         <Parent >
             <Ghost />
-            <Container >
+            <Container className={scrollY > 0? `fixed`:``} >
                 <div className="top_menus container">
                     <div className="left_sector ">
                         <Link href="/">
@@ -19,7 +35,7 @@ const Header = () => {
                         </Link>
                         
                         <div className="menu_par">
-                            <div className="menus">Багш хайх</div>
+                            <div className="menus">Багш</div>
                             <div className="menus">Сурах бичиг</div>
                         </div>
                     </div>
@@ -46,6 +62,12 @@ export default Header
 
 const Parent = styled.div`
     position:relative;
+    .fixed{
+        position:fixed;
+        z-index:3;
+        background-color:${props=>props.theme.body};
+        box-shadow:0 1px 8px -4px;
+    }
 `
 
 const Ghost = styled.div`

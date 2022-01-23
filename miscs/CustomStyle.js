@@ -9,8 +9,8 @@ export const MainButtonStyle = styled.button`
     padding:6px 24px;
     font-size:13px;
     font-weight:${props=>props.theme.weight2};
-    border: none;
-    outline: none;
+    outline: none !important;
+    border:none !important;
     transition:all 0.2s ease;
     position:relative;
     z-index:2;

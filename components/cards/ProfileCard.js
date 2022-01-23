@@ -2,12 +2,12 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { FaChalkboardTeacher } from "react-icons/fa"
 
-const ProfileCard = ({data, clickHandle}) => {
+const ProfileCard = ({ data, clickHandle, profile}) => {
     const custom = useRef()
 
 
     return (
-        <CardStyle onClick={_=>clickHandle(data, custom)} ref={custom} className={`custom`} >
+        <CardStyle onClick={_=>clickHandle(data, custom)} ref={custom} className={`custom ${profile.name === data.name?`active`:``}`} >
             <div className="image_cont">
                 <img src={data.image} alt="bagshin-info" />
             </div>

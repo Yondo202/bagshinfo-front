@@ -1,27 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaChalkboardTeacher } from "react-icons/fa"
 import styled from 'styled-components'
 import { TitleStyle, MainButtonStyle } from "@/miscs/CustomStyle"
 
 const Categorycards = () => {
+    const [ active, setActive ] = useState({ name:'Гэрээр заах', data:[] })
+
+    const handleClick = ( el ) =>{
+        setActive(el)
+    }
+
+    useEffect(()=>{
+        setActive(menu[0])
+    },[])
+
     return (
         <Container className="container">
-            <TitleStyle>Meet Talent in Our Network</TitleStyle>
+            <TitleStyle>Таньд санал болгох</TitleStyle>
 
             <div className="main_content">
                 <div className="header_menu">
-                    <div className="menu_text"> Гэрээр заах</div>
-                    <div className="menu_text"> Сургалтын төвтэй</div>
-                    <div className="menu_text"> Өөрийн туршлагаар</div>
-                    <div className="menu_text"> Боловсролын байгууллага</div>
+                    {menu.map((el,ind)=>{
+                        return(
+                            <div key={ind} onClick={_=>handleClick(el)} className={`menu_text ${active.name===el.name?`active`:``}`}>{el.name}</div>
+                        )
+                    })}
                 </div>
 
                 <div className="profiles_content">
-                    {Data.map((el,ind)=>{
+                    {active.data.map((el,ind)=>{
                         return(
                             <div key={ind} className="profile_cards">
                                 <div className="image_par">
-                                    <img src="https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157721/talent_tabs_section-c9578280809b65cb349f26fac0b89dd6.jpg" alt="bagshinfo" />
+                                    <img src={el.image} alt="bagshinfo" />
                                 </div>
                                <div className="text_container">
                                 <div className="title">Бааатар Цогтсайхан</div>
@@ -43,11 +54,25 @@ const Categorycards = () => {
 
 export default Categorycards
 
-const Data = [
-    { text:1 },
-    { text:2 },
-    { text:3 }
+const menu = [
+    {name:'Гэрээр заах', data : [
+        { text:1, image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157685/talent_tabs_section-58d8bfa059b6d433ef5a1421276e2ca2.jpg' },
+        { text:2, image:"https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157721/talent_tabs_section-c9578280809b65cb349f26fac0b89dd6.jpg" },
+        { text:3, image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157724/talent_tabs_section-487b163dc8e24180d3e9b88895fbfcfd.jpg' }
+    ]},
+    {name:'Сургалтын төвд', data : [
+        { text:1, image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/403431/talent_tabs_section-beb14a4c5b5d350eeb62d77704a9dd63.jpg' },
+        { text:2, image:"https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157772/talent_tabs_section-222213bbf5fe28c6ba3dddfd51d08994.jpg" },
+        { text:3, image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157693/talent_tabs_section-9a2016252f5e887b11b53080a29d9013.jpg' }
+    ]},
+    {name:'Өөрийн туршлагаар', data : [
+        { text:1, image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157811/talent_tabs_section-01185fa434ff86cab7b95023e8778e01.jpg' },
+        { text:2, image:"https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157808/talent_tabs_section-1abbdc6a80905c1af9cd320fd43bd7b8.jpg" },
+        { text:3, image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157829/talent_tabs_section-f7bca6f6e6854a7cdf278ebe8a9f5f66.jpg' }
+    ]},
 ]
+
+
 
 const Container = styled.div`
     ${({theme})=>`
@@ -143,7 +168,7 @@ const Container = styled.div`
                 color: ${theme.textColor4};
                 font-size:18px;
                 font-weight: 600;
-                margin: 0 15px;
+                margin: 0 18px;
                 padding-bottom: 13px;
 
             }

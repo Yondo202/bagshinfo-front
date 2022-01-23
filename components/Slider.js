@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import ProfileCard from '@/components/cards/ProfileCard'
 
 
-const Slider = ({ setProfile }) => {
+const Slider = ({ setProfile, data, profile }) => {
     const ScrollHandle = (where) =>{
         let el = document.getElementById("myel");
         if(where === "right"){
@@ -32,10 +32,10 @@ const Slider = ({ setProfile }) => {
                     <svg viewBox="0 0 13 38" width="13" height="38"><path d="M12 1L2 19l10 18" stroke="currentColor" strokeWidth="2" fill="none" fillRule="evenodd"></path></svg>
                 </div>
                 <div id="myel" className="slide_contents"  >
-                    {Data.map((el,ind)=>{
+                    {data.map((el,ind)=>{
                         return(
                             <React.Fragment key={ind}>
-                                <ProfileCard clickHandle={ItemActive} data={el} />
+                                <ProfileCard profile={profile} clickHandle={ItemActive} data={el} />
                             </React.Fragment>
                         )
                     })}
@@ -52,6 +52,7 @@ export default Slider
 
 const Container = styled.div`
     ${({theme})=>`
+        margin-bottom:100px;
         .slider_parent{
             width:100%;
             display:flex;
@@ -100,35 +101,3 @@ const Container = styled.div`
     `}
 `
 
-const Data = [
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан d', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан 2', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан 3', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан 5', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-    { image:'https://bs-uploads.toptal.io/blackfish-uploads/components/image/content/file_file/file/157821/hero_section_small-740baf9b4baef3d501e9e1ff36c68542.jpg',
-    name:'Баатарсайхан', teaching:'Хими'  },
-]
