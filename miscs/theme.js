@@ -14,9 +14,12 @@ export const background2 = "#ebeced";
 
 export const hoverBackground = "#EDF1Fd"
 
+export const opacityBackground = "#00cc8314" // green opacity
+
 
 export const fontSize = '13px';
 export const fontSize2 = '16px';
+export const fontSize3 = '14px';
 
 
 export const  textColor= '#262d3d'; // arai tod ( title, link  ) -  'undsen text'

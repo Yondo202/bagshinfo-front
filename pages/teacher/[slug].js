@@ -1,8 +1,7 @@
 import React from 'react';
+import TeacherProfile from '@/components/teacher/TeacherProfile';
 
 const Index = () =>{
-    return(
-        <div>H1</div>
-    )
+    return <TeacherProfile />
 }
 export default Index

@@ -19,7 +19,7 @@ const Slider = ({ setProfile, data, profile }) => {
         let el = document.getElementById("myel");
         if ((el.scrollLeft + 800) < ref.current.offsetLeft){
             el.scrollLeft += 420;
-        }else if (el.scrollLeft+300 > ref.current.offsetLeft){
+        }else if (el.scrollLeft+400 > ref.current.offsetLeft){
             el.scrollLeft -= 420;
         }
     }
