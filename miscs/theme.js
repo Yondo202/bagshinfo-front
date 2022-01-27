@@ -22,6 +22,7 @@ export const fontSize2 = '16px';
 export const fontSize3 = '14px';
 
 
+export const  textColorBlack= '#000'; // 
 export const  textColor= '#262d3d'; // arai tod ( title, link  ) -  'undsen text'
 export const  textColor2='#455065'; // ( description ) // arai budeg
 export const  textColor3='#204ecf'; // todruulsan text ( blue )

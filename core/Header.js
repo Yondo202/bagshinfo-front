@@ -47,7 +47,10 @@ const Header = () => {
                                     <MainButtonStyle type="button">Нэвтрэх</MainButtonStyle>
                                 </a>
                             </Link>
-                            <div className="menus">Багшаар бүртгүүлэх</div>
+                            <Link href="/auth/tech/signup">
+                                <a className="menus">Багшаар бүртгүүлэх</a>
+                            </Link>
+                            
                         </div>
                     </div>
                 </div>

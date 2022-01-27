@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from '@/components/auth/Login';
+import Login from '@/components/auth/user/Login';
 
 const login = () => {
   return <Login />
