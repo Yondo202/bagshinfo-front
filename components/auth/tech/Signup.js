@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Link from "next/link"
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
 import { useForm } from "react-hook-form"
 import { DatePicker, Select, Input, InputNumber, Upload, Tooltip } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import axios from "@/global/axiosbase"
 
-const initial = {
-    email: null,
-    password: null,
-}
-
+// const initial = 
 
 function beforeUpload(file) {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -25,13 +22,23 @@ function beforeUpload(file) {
 }
 
 const Signup = () => {
+    const [ lessons, setLessons ] = useState([])
     const [ imageLoad ] = useState(false);
     const [ imageUrl, setImageUrl ] = useState('');
 
-    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch } = useForm({
-        defaultValues: initial
-    });
+    useEffect(()=>{
+        void async function fetch(){
+        //    let less =  await axios.get(`lessons`)
+        //    console.log(`less`, less)
+        }()
+    },[])
 
+    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch } = useForm({
+        defaultValues: {
+            // email: null,
+            // password: null,
+        }
+    });
     const state = watch()
 
     const uploadButton = (
@@ -43,6 +50,9 @@ const Signup = () => {
 
     console.log(`state`, state)
 
+    const onChangeHandle = (name, value) =>{
+
+    }
 
   return( 
     <Container className="container">
@@ -81,7 +91,7 @@ const Signup = () => {
                             trigger={['focus']}
                             title={'Цаашид email - ээр нэвтрэнэ'}
                             placement="bottomLeft"
-                            overlayClassName="numeric-input"
+                            // overlayClassName="numeric-input"
                         >
                             <Input
                                 size="large"

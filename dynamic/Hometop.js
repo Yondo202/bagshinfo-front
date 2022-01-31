@@ -35,7 +35,7 @@ const Hometop = () => {
                                 <div className="user_image">
                                     <img src={profile?.image} alt="user" />
                                 </div>
-                                <div className={`card_parent`}>
+                                <div className="card_parent">
                                     <div className="map_image" >
                                         <div className="detect" />
                                     </div>
