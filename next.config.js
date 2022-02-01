@@ -24,7 +24,7 @@ module.exports = (phase) => {
         // cart:"cart_items",
         // user: "user_info",w
         serverUrl:(()=>{
-            if(isDev) return 'http://localhost:1337/api/'
+            if(isDev) return 'http://localhost:1331/api/'
             // if(isProd) return 'https://4708-124-158-107-34.ngrok.io'
             // if(isSTaging) return 'https://4708-124-158-107-34.ngrok.io'
         })(),

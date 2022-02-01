@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import Link from "next/link"
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
 import { useForm } from "react-hook-form"
+import { EyeInvisibleOutlined, EyeTwoTone, UnlockOutlined, UserOutlined } from '@ant-design/icons';
 import { DatePicker, Select, Input, InputNumber, Upload, Tooltip } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from "@/global/axiosbase"
+import { async } from 'regenerator-runtime';
+const { Option } = Select
 
 // const initial = 
 
@@ -28,17 +31,28 @@ const Signup = () => {
 
     useEffect(()=>{
         void async function fetch(){
-        //    let less =  await axios.get(`lessons`)
-        //    console.log(`less`, less)
+            try{
+                let less =  await axios.get(`lessons`)
+                setLessons(less?.data?.data)
+            }catch(err){
+                console.log(`err`, err)
+            }
+            
         }()
     },[])
 
-    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch } = useForm({
+    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch, setError } = useForm({
         defaultValues: {
-            // email: null,
-            // password: null,
+            last_name: null, // овог
+            first_name: null,
+            email: null,
+            phone: null,
+            lesson:[],
+            password:null,
+            password_again: null,
         }
     });
+
     const state = watch()
 
     const uploadButton = (
@@ -48,10 +62,19 @@ const Signup = () => {
         </div>
     );
 
-    console.log(`state`, state)
+    const onSubmit = data => {
+        if(state.password_again !== state.password){
+            setError('password_again', { message: "Нууц үг адил биш байна", })
+        }else{
+            console.log(`data`, data)
+        }
 
-    const onChangeHandle = (name, value) =>{
+        
+    };
 
+    const onChangeHandle = (name, value, addition) =>{
+        setValue(name, value)
+        clearErrors()
     }
 
   return( 
@@ -67,22 +90,31 @@ const Signup = () => {
 
         <div className="bodys">
 
-            <div className="main_content">
+            <form className="main_content" onSubmit={handleSubmit(onSubmit)}>
                 <div className="title">Бүртгүүлэх</div>
 
                 <div className="inputs_body">
                     <div className="input_par">
                         <div className="label">Овог <span className="required">*</span></div>
                         <Input
+                            { ...register('last_name', { required: 'Овог оо оруулна уу' }) }
+                            className={errors.last_name?.message?`err_style`:``}
+                            value={state.last_name}
                             size="large"
-                            placeholder=""
+                            onChange={el => onChangeHandle(el.target.name, el.target.value)}
                         />
+                        {errors.last_name?.message&&<span className="err_text">{errors.last_name?.message}</span>}
                     </div>
                     <div className="input_par">
                         <div className="label">Нэр <span className="required">*</span></div>
                         <Input
+                            { ...register('first_name', { required: 'Нэр ээ оруулна уу' }) }
+                            className={errors.first_name?.message?`err_style`:``}
+                            value={state.first_name}
                             size="large"
+                            onChange={el => onChangeHandle(el.target.name, el.target.value)}
                         />
+                        {errors.first_name?.message&&<span className="err_text">{errors.first_name?.message}</span>}
                     </div>
 
                     <div className="input_par">
@@ -94,26 +126,78 @@ const Signup = () => {
                             // overlayClassName="numeric-input"
                         >
                             <Input
+                                { ...register('email', { required: 'Email ээ оруулна уу' }) }
+                                className={errors.email?.message?`err_style`:``}
+                                value={state.email}
                                 size="large"
+                                onChange={el => onChangeHandle(el.target.name, el.target.value)}
                             />
                         </Tooltip>
-                        
+                        {errors.email?.message&&<span className="err_text">{errors.email?.message}</span>}
                     </div>
                 
                     <div className="input_par">
                         <div className="label">Утасны дугаар <span className="required">*</span></div>
                         <InputNumber
+                            { ...register('phone', { required: 'Утасны дугаараа оруулна уу' }) }
+                            className={errors.phone?.message?`err_style`:``}
+                            value={state.phone}
                             size="large"
+                            onChange={value => onChangeHandle('phone', parseInt(value))}
                         />
+                        {errors.phone?.message&&<span className="err_text">{errors.phone?.message}</span>}
                     </div>
 
                     <div className="input_par">
                         <div className="label">Заах хичээл <span className="required">*</span></div>
-                        <Input
+                        <Select
+                            { ...register('lesson', { required: '1 буюу түүнээс дээш хичээл сонгоно уу' }) }
+                            className={errors.lesson?.message?`err_style`:``}
+                            value={state.lesson}
+
                             size="large"
-                        />
+                            mode="multiple"
+                            placeholder="- Сонго -"
+                            onChange={(value, option) => { onChangeHandle( 'lesson', value, 'many' ) }}
+                        >
+                            {lessons.map((el,ind)=>{
+                                return(
+                                    <Option value={el.id} name="lesson" key={ind}>
+                                        {el.attributes.name}
+                                    </Option>
+                                )
+                            })}
+                        </Select>
+                        {errors.lesson?.message&&<span className="err_text">{errors.lesson?.message}</span>}
                     </div>
+
                     <div className="input_par">
+                        <div className="label">Нууц үг <span className="required">*</span></div>
+                        <Input.Password 
+                            {...register("password", { required: 'Нууц үгээ оруулна уу' })}
+                            onChange={el => onChangeHandle(el.target.name, el.target.value)}
+                            className={errors.password ? `err_style` : ``}
+                            size="large"
+                            prefix={<UnlockOutlined />} 
+                            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                        />
+                        {errors.password?.message&&<span className="err_text">{errors.password?.message}</span>}
+                    </div>
+
+                    <div className="input_par">
+                        <div className="label">Нууц үг давтах <span className="required">*</span></div>
+                        <Input.Password 
+                            {...register("password_again", { required: 'Нууц үг ээ давтаж оруулна уу' })}
+                            onChange={el => onChangeHandle(el.target.name, el.target.value)}
+                            className={errors.password_again ? `err_style` : ``}
+                            size="large"
+                            prefix={<UnlockOutlined />} 
+                            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                        />
+                        {errors.password_again?.message&&<span className="err_text">{errors.password_again?.message}</span>}
+                    </div>
+
+                    {/* <div className="input_par">
                         <div className="label">Нүүр зураг <span className="required">*</span></div>
                         <Upload
                             name="avatar"
@@ -123,12 +207,11 @@ const Signup = () => {
                         >
                             {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
                         </Upload>
-                    </div>
+                    </div> */}
                 </div>
                 
                 <MainButtonStyle className="custom">Бүртгүүлэх</MainButtonStyle>
-
-            </div>
+            </form>
 
         </div>
     </Container>
@@ -150,7 +233,17 @@ const Container = styled.div`
                 width: 100%;
             }
             .input_par{
-                margin-bottom:22px;
+                width:100%;
+                margin-bottom:24px;
+                position:relative;
+                .err_text{
+                    position:absolute;
+                    top:105%;
+                    right:0;
+                    font-size:11px;
+                    color:red;
+                    font-weight:${props=>props.theme.weight};
+                }
                 .label{
                     color:${props=>props.theme.textColor2};
                     font-size:${props=>props.theme.fontSize};
@@ -159,6 +252,25 @@ const Container = styled.div`
                     .required{
                         color:#eb2329;
                     }
+                }
+                .ant-input-password{
+                    .ant-input-prefix{
+                        svg{
+                            color:rgba(0, 0, 0, 0.45);
+                        }
+                        margin-right: 10px;
+                    }
+                    .ant-input{
+                        padding-bottom:0;
+                    }
+                }
+                
+                .ant-select{
+                    font-size: ${props=>props.theme.fontSize};
+                    color:${props=>props.theme.textColorBlack};
+                    font-weight:${props=>props.theme.weight};
+                    width:100%;
+                    
                 }
                 .ant-input{
                     font-size: ${props=>props.theme.fontSize};
@@ -171,11 +283,22 @@ const Container = styled.div`
                
                 .ant-input-number{
                     width:100%;
+                    .ant-input-number-input-wrap{
+                        input{
+                            color:${props=>props.theme.textColorBlack};
+                            font-weight:${props=>props.theme.weight};
+                            font-size: ${props=>props.theme.fontSize};
+                        }
+                    }
+
                     .ant-input-number-handler-wrap{
                         display:none;
                     }
                 }
-
+                .err_style{
+                    border:1px solid #dc3c1e !important;
+                    color:#dc3c1e !important;
+                }
             }
           
             .title{
