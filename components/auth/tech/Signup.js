@@ -4,10 +4,11 @@ import Link from "next/link"
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
 import { useForm } from "react-hook-form"
 import { EyeInvisibleOutlined, EyeTwoTone, UnlockOutlined, UserOutlined } from '@ant-design/icons';
-import { DatePicker, Select, Input, InputNumber, Upload, Tooltip } from 'antd';
+import { DatePicker, Select, Input, InputNumber, Upload, Tooltip, notification } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from "@/global/axiosbase"
 import { async } from 'regenerator-runtime';
+import AlertMessage from '@/miscs/AlertMessage';
 const { Option } = Select
 
 // const initial = 
@@ -47,7 +48,7 @@ const Signup = () => {
             first_name: null,
             email: null,
             phone: null,
-            lesson:[],
+            lessons:[],
             password:null,
             password_again: null,
         }
@@ -63,35 +64,67 @@ const Signup = () => {
     );
 
     const onSubmit = data => {
+
+        console.log(`data`, data)
+
         if(state.password_again !== state.password){
             setError('password_again', { message: "Нууц үг адил биш байна", })
         }else{
-            console.log(`data`, data)
-        }
 
+            axios.post(`auth/local/register`, data).then(res=>{
+                console.log(`res`, res)
+            }).catch(err=>{
+                console.log(`err?.response?`, err?.response)
+
+                
+                if ( err?.response?.data?.error?.message === "Email is already taken" ){
+                    setError('email', { message: "Email хаяг давхцаж байна", })
+                    AlertMessage(`Email хаяг давхцаж байна`, 'warning')
+                }
+                if( err?.response?.data?.error?.message === "Email already taken"){
+                    setError('phone', { message: "Утасны дугаар давхцаж байна", })
+                    AlertMessage(`Утасны дугаар давхцаж байна`, 'warning')
+                }
+            })
+
+        }
         
     };
 
     const onChangeHandle = (name, value, addition) =>{
-        setValue(name, value)
+        console.log(`value`, value)
+        console.log(`name`, name)
+        setValue(name, name==="phone"? parseInt(value) :value)
         clearErrors()
     }
 
+
+    const openNotification = () => {
+        notification.success({
+        message: `Амжилттай бүртгэгдлээ`,
+        // description: 'This is the content of the',
+        placement:'topRight',
+        duration:3,
+        });
+    };
+
   return( 
     <Container className="container">
-        <Link href="/">
-            <a>
-                <div className="logo_par">
-                    <img src="https://www.toptal.com/toptal-logo.png" alt="bagshinfo_logo" />
-                </div>
-            </a>
-        </Link>
-        
+        <div className="header">
+            <Link href="/">
+                <a>
+                    <div className="logo_par">
+                        <img src="https://www.toptal.com/toptal-logo.png" alt="bagshinfo_logo" />
+                    </div>
+                </a>
+            </Link>
+        </div>
+       
 
         <div className="bodys">
 
             <form className="main_content" onSubmit={handleSubmit(onSubmit)}>
-                <div className="title">Бүртгүүлэх</div>
+                <div onClick={() => openNotification('topRight')} className="title">Бүртгүүлэх</div>
 
                 <div className="inputs_body">
                     <div className="input_par">
@@ -138,12 +171,13 @@ const Signup = () => {
                 
                     <div className="input_par">
                         <div className="label">Утасны дугаар <span className="required">*</span></div>
-                        <InputNumber
+                        <Input
+                            type="number"
                             { ...register('phone', { required: 'Утасны дугаараа оруулна уу' }) }
                             className={errors.phone?.message?`err_style`:``}
                             value={state.phone}
                             size="large"
-                            onChange={value => onChangeHandle('phone', parseInt(value))}
+                            onChange={value => onChangeHandle('phone', parseInt(value.target.value))}
                         />
                         {errors.phone?.message&&<span className="err_text">{errors.phone?.message}</span>}
                     </div>
@@ -151,18 +185,18 @@ const Signup = () => {
                     <div className="input_par">
                         <div className="label">Заах хичээл <span className="required">*</span></div>
                         <Select
-                            { ...register('lesson', { required: '1 буюу түүнээс дээш хичээл сонгоно уу' }) }
-                            className={errors.lesson?.message?`err_style`:``}
-                            value={state.lesson}
+                            { ...register('lessons', { required: '1 буюу түүнээс дээш хичээл сонгоно уу' }) }
+                            className={errors.lessons?.message?`err_style`:``}
+                            value={state.lessons}
 
                             size="large"
                             mode="multiple"
                             placeholder="- Сонго -"
-                            onChange={(value, option) => { onChangeHandle( 'lesson', value, 'many' ) }}
+                            onChange={(value, option) => { onChangeHandle( 'lessons', value, 'many' ) }}
                         >
                             {lessons.map((el,ind)=>{
                                 return(
-                                    <Option value={el.id} name="lesson" key={ind}>
+                                    <Option value={el.id} name="lessons" key={ind}>
                                         {el.attributes.name}
                                     </Option>
                                 )
@@ -314,13 +348,18 @@ const Container = styled.div`
             }
         }
     }
-    .logo_par{
-        cursor:pointer;
-        padding:15px 0px;
-        img{
-            width:116px;
-            height:auto;
-            object-fit:contain;
+    .header{
+        display:flex;
+        .logo_par{
+            cursor:pointer;
+            padding:15px 0px;
+            img{
+                width:116px;
+                height:auto;
+                object-fit:contain;
+            }
         }
     }
+   
+    
 `

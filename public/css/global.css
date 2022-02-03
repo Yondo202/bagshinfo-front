@@ -9,3 +9,24 @@ body{
 html{
     scroll-behavior: smooth;
 }
+.ant-notification {
+    color: #000;
+}
+.ant-notification-notice-description{
+    color: #000;
+    font-weight: 500;
+}
+.ant-notification-notice-message{
+    color: #000;
+    font-size: 14px !important;
+    font-weight: 500;
+    margin-top: 1px;
+}
+
+.ant-notification-notice{
+
+}
+.ant-notification-notice-content{
+    display:flex;
+    align-items: center;
+}
