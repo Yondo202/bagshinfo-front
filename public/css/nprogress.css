@@ -3,6 +3,15 @@
     /* pointer-events: none; */
   }
   
+
+  @-webkit-keyframes nprogress-spinner {
+    0%   { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(3000deg); }
+  }
+  @keyframes nprogress-spinner {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(3000deg); }
+  }
   #nprogress .bar {
     background: #334195;
   
@@ -26,9 +35,9 @@
     box-shadow: 0 0 10px #334195, 0 0 5px #334195;
     opacity: 1.0;
   
-    -webkit-transform: rotate(3deg) translate(0px, -4px);
+    /* -webkit-transform: rotate(3deg) translate(0px, -4px);
         -ms-transform: rotate(3deg) translate(0px, -4px);
-            transform: rotate(3deg) translate(0px, -4px);
+            transform: rotate(3deg) translate(0px, -4px); */
   }
   
   /* Remove these to get rid of the spinner */
@@ -47,16 +56,16 @@
   }
   
   #nprogress .spinner-icon {
-    background-image: url('/img/spinner.svg');
+    background-image: url('/img/loading.svg');
     max-width: 4rem;
     max-height: 4rem;
     min-width: 4rem;
     min-height: 4rem;
     margin-left: 4rem;
   
-    animation-duration: 1.4s;
-    animation-name: tubeRotate;
-    animation-timing-function: ease-in-out;
+    animation-duration: 10s;
+    animation-name: nprogress-spinner;
+    animation-timing-function: ease;
     animation-iteration-count: infinite;
   }
   
@@ -70,20 +79,13 @@
     position: absolute;
   }
   
-  @-webkit-keyframes nprogress-spinner {
-    0%   { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-  @keyframes nprogress-spinner {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+ 
   
-  @keyframes tubeRotate {
+  /* @keyframes tubeRotate {
     0% {
         transform: translate(-50%, -50%);
     }
-    60%, 100% {
+    100% {
         transform: translate(-50%, -50%) rotate(1turn);
     }  
-  }
+  } */

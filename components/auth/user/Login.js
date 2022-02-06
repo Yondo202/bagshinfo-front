@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from "next/link"
+import Image from "next/image"
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
+import axios from '@/global/axiosbase';
 
 const Login = () => {
+
   return( 
     <Container className="container">
         <Link href="/">
@@ -16,7 +19,6 @@ const Login = () => {
         
 
         <div className="bodys">
-
             <div className="main_content">
                 <div className="title">Нэвтрэх</div>
 

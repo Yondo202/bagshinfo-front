@@ -1,7 +1,7 @@
 import {MenuContext} from '@/global/ContextMenuProvider'
 import { useContext } from 'react';
 
-const placeholder = '/img/placeholder.jpg'
+const placeholder = '/img/placeholder.png'
 const path = process.env.serverUrl;
 
 const minimize = (obj, quality) => {

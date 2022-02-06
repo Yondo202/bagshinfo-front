@@ -13,7 +13,6 @@ export const background = "#d2d6e2";
 export const background2 = "#ebeced";
 
 export const hoverBackground = "#EDF1Fd"
-
 export const opacityBackground = "#00cc8314" // green opacity
 
 

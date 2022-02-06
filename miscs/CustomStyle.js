@@ -14,6 +14,12 @@ export const MainButtonStyle = styled.button`
     transition:all 0.2s ease;
     position:relative;
     z-index:2;
+    svg{
+        position:absolute;
+        right:5%;
+        top:32%;
+        font-size:17px;
+    }
     &:hover{
         background-color:#05947C;
     }

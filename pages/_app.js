@@ -10,9 +10,8 @@ import 'moment/locale/mn';
 import { MenuProvider } from "@/global/ContextMenuProvider";
 import { parseCookies } from "nookies";
 import NProgress from 'nprogress';
+import Axios from "axios"
 // import '../public/css/style.css'
-
-
 
 // function MyApp({ Component, pageProps }) {
 //   return <Component {...pageProps} />
@@ -20,6 +19,7 @@ import NProgress from 'nprogress';
 
 // export default MyApp
 //Binding events. 
+
 Router.events.on('routeChangeStart', () => NProgress.start()); Router.events.on('routeChangeComplete', () => NProgress.done()); Router.events.on('routeChangeError', () => NProgress.done());
 
 const MyApp = ({ Component, pageProps, router  }) =>{
@@ -37,18 +37,37 @@ const MyApp = ({ Component, pageProps, router  }) =>{
   )
 }
 
-export default MyApp
-
-// MyApp.getInitialProps = async ({ ctx }) => {
-
-//   const { jwt } = parseCookies(ctx)
-
-//   if (jwt) {
-//     try {
-//       let res = await Axios(process.env.serverUrl + '/users/me', { headers: { 'Authorization': 'Bearer ' + jwt } });
-//       return { initialAuth: res.data };
-//     }
-//     catch (e) { return {} }
+// function redirectUser(ctx, location){
+//   if(ctx.req){
+//       ctx.res.writeHead(302, { Location: location });
+//       ctx.res.end();
+//   }else{
+//       Router.push(location);
 //   }
-//   return {};
 // }
+
+MyApp.getInitialProps = async({ Component, ctx }) =>{
+  let pageProps = {}
+
+  const jwt = parseCookies(ctx).jwt;
+
+  console.log('jwt', jwt);
+  // const role = parseCookies(ctx).role;
+
+
+  // if(!jwt){
+  //   if( ctx.pathname.includes("/auth") ){
+  //       redirectUser(ctx, "/login");
+  //   }
+  // }
+  
+  if(Component.getInitialProps){
+      pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return{
+      pageProps
+  }
+}
+
+export default MyApp;

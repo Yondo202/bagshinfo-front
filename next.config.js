@@ -24,7 +24,7 @@ module.exports = (phase) => {
         // cart:"cart_items",
         // user: "user_info",w
         serverUrl:(()=>{
-            if(isDev) return 'http://localhost:1331/api/'
+            if(isDev) return 'http://localhost:1331'
             // if(isProd) return 'https://4708-124-158-107-34.ngrok.io'
             // if(isSTaging) return 'https://4708-124-158-107-34.ngrok.io'
         })(),
@@ -39,6 +39,9 @@ module.exports = (phase) => {
         newsUrl:(()=>{
             return '/news/'
         })(),
+        images: {
+            deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+        },
     }
     return{
         env

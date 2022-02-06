@@ -53,10 +53,7 @@ const Hometop = () => {
     )
 }
 
-
-
 export default Hometop
-
 
 const animate = keyframes`
     0% { transform:scale(1); box-shadow: 0 0 1.4px 1.4px #204ecf; }
