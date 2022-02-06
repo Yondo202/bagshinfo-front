@@ -12,7 +12,7 @@ const Login = () => {
         <Link href="/">
             <a>
                 <div className="logo_par">
-                    <img src="https://www.toptal.com/toptal-logo.png" alt="bagshinfo_logo" />
+                    <img src="/img/logo_main.png" alt="bagshinfo_logo" />
                 </div>
             </a>
         </Link>
@@ -126,9 +126,9 @@ const Container = styled.div`
     }
     .logo_par{
         cursor:pointer;
-        padding:15px 0px;
+        padding:10px 0px;
         img{
-            width:116px;
+            width:90px;
             height:auto;
             object-fit:contain;
         }

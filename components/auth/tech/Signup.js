@@ -9,14 +9,13 @@ import { BsArrowRight, BsCardImage } from "react-icons/bs"
 import { RiImageAddFill } from "react-icons/ri"
 import { useForm } from "react-hook-form"
 import { EyeInvisibleOutlined, EyeTwoTone, UnlockOutlined, UserOutlined } from '@ant-design/icons';
-import { DatePicker, Select, Input, InputNumber, Upload, Tooltip, notification } from 'antd';
+import { DatePicker, Select, Input, InputNumber, Upload, Tooltip } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from "@/global/axiosbase"
 import AlertMessage from '@/miscs/AlertMessage';
 const { Option } = Select
 import CkEditor from "@/miscs/CKeditor"
 import NProgress from 'nprogress';
-
 
 
 // const initial = 
@@ -47,37 +46,13 @@ function beforeUpload(file) {
 }
 
 const Signup = () => {
-    const { jwt, user, signup_page  } = parseCookies();
+    const { jwt } = parseCookies();
     const [ step, setStep ] = useState(0);
     const [ lessons, setLessons ] = useState([])
     const [ imageLoad, setImageLoad ] = useState(false);
     const [ imageLoad2, setImageLoad2 ] = useState(false);
 
-    const [ userId, setUserId ] = useState({})
-
-    // /api/users/:id   
-
-    useEffect(()=>{
-        void async function fetch(){
-            try{
-                let less =  await axios.get(`/lessons`)
-                // let less2 =  await axios.get(`/users-permissions/roles` )
-                // console.log('less2', less2);
-                setLessons(less?.data?.data)
-            }catch(err){
-                console.log(`err`, err)
-            }
-        }()
-    },[])
-
-    useEffect(()=>{
-        if(signup_page){
-            setStep(signup_page)
-            setUserId(JSON.parse(user).id)
-        }
-    },[step])
-
-    console.log('userId', userId);
+    const [ userId, setUserId ] = useState(null)
 
     const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch, setError } = useForm({
         defaultValues: {
@@ -94,6 +69,18 @@ const Signup = () => {
             short_presentation:'',
         }
     });
+    // /api/users/:id   
+
+    useEffect(()=>{
+        void async function fetch(){
+            try{
+                let less =  await axios.get(`/lessons`)
+                setLessons(less?.data?.data)
+            }catch(err){
+                console.log(`err`, err)
+            }
+        }()
+    },[])
 
     const state = watch()
 
@@ -120,10 +107,7 @@ const Signup = () => {
         const image = new FormData();
         image.append("files", file.file.originFileObj);
         axios.post(`/upload`, image).then(res=>{
-        axios.put(`/users/${userId}`, { [name]: res?.data[0]?.id }, { headers: { Authorization: `bearer ${jwt}` }} ).then(ress=>{
-            console.log('ress', ress);
-        })
-
+        axios.put(`/users/${userId}`, { [name]: res?.data[0]?.id }, { headers: { Authorization: `bearer ${jwt}` }}  )
         setValue(name, res?.data[0])
         if(name==="profile_image"){
             setImageLoad(false)
@@ -139,6 +123,8 @@ const Signup = () => {
     const onSubmit = data => {
         if(state.password_again !== state.password){
             setError('password_again', { message: "Нууц үг адил биш байна", })
+        }else if (state.password.length < 8){
+            setError('password', { message: "Нууц үг 8 аас дээш оронтой байх ёстой!", })
         }else{
             NProgress.start()
             SignFirst(data)
@@ -146,57 +132,54 @@ const Signup = () => {
     };
 
 
-    const onSubmitStep2 = data => {
-        NProgress.start()
-        axios.put(`/users/${userId}`, { short_presentation: state.short_presentation }, { headers: { Authoorization: `bearer ${jwt}` } }).then(_=>{
-            setStep(2)
-        })
+    const onSubmitStep2 =_=> {
+        if(!imageLoad && !imageLoad2){
+            NProgress.start()
+            axios.put(`/users/${userId}`, { short_presentation: state.short_presentation }, { headers: { Authorization: `bearer ${jwt}` } }   ).then(_=>{
+                setStep(2)
+                NProgress.done()
+            })
+        }
     };
 
 
     const SignFirst = async (data) => {
         try{
             let res = await axios.post(`/auth/local/register`, {...data, role:'teacher', username: `${state.last_name.slice(0,1)}. ${state.first_name}` })
+            setUserId(res.data.user?.id)
+
             setCookie( null, 'jwt', res.data.jwt, {
                 maxAge: 30 * 24 * 60 * 60,
                 path: '/',
                 // encode:'jwt'
             })
-            setCookie( null, 'user', JSON.stringify(res.data.user), {
-                maxAge: 30 * 24 * 60 * 60,
-                path: '/',
-            })
-            
-            setCookie( null, 'signup_page', 1, {
-                maxAge: 1 *  1 * 60 * 60,
-                path: '/',
-            })
 
             AlertMessage(`Амжилттай бүртгэгдлээ`, 'success')
             setStep(1)
-
+            window.scrollTo(0, 0);
         }catch(err){
-            console.log('err?.response', err);
             if ( err?.response?.data?.error?.message === "Email is already taken" ){
                 setError('email', { message: "Email хаяг давхцаж байна", })
                 AlertMessage(`Email хаяг давхцаж байна`, 'warning')
                 return
-            }
-            if( err?.response?.data?.error?.message === "Email already taken"){
-                setError('phone', { message: "Утасны дугаар давхцаж байна", })
-                AlertMessage(`Утасны дугаар давхцаж байна`, 'warning')
+            }else if( err?.response?.data?.error?.message.includes('email') ){
+                AlertMessage(`Хүсэлт амжилтгүй`, 'warning')
+                setError('email', { message: "Алдаатай байна", })
                 return
             }
-
-            AlertMessage(`Хүсэлт амжилтгүй`, 'warning')
+            // if( err?.response?.data?.error?.message === "Email already taken"){
+            //     setError('phone', { message: "Утасны дугаар давхцаж байна", })
+            //     AlertMessage(`Утасны дугаар давхцаж байна`, 'warning')
+            //     return
+            // }
             
+            AlertMessage(`Хүсэлт амжилтгүй`, 'warning')
         }finally{
             NProgress.done()
         }
     }
 
-    const onChangeHandle = (name, value, addition) =>{
-        // setValue(name, name==="phone"? parseInt(value) :value)
+    const onChangeHandle = (name, value ) =>{
         setValue(name, value)
         clearErrors()
     }
@@ -226,7 +209,7 @@ const Signup = () => {
                         </div>
                     </div>
 
-                    <div className="custom_level Active">
+                    <div className={`custom_level ${step >= 1?`Active`:''}`}>
                         <div className="number">
                             1
                         </div>
@@ -236,7 +219,7 @@ const Signup = () => {
                         </div>
                     </div>
 
-                    <div className="custom_level">
+                    <div className={`custom_level ${step>=2?`Active`:''}`}>
                         <div className="number">
                             2
                         </div>
@@ -318,7 +301,7 @@ const Signup = () => {
                                 className={errors.phone?.message?`err_style`:``}
                                 value={state.phone}
                                 size="large"
-                                onChange={value => onChangeHandle('phone', parseInt(value.target.value))}
+                                onChange={value => onChangeHandle('phone', value.target.value)}
                             />
                             {errors.phone?.message&&<span className="err_text">{errors.phone?.message}</span>}
                         </div>

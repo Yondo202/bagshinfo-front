@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-let CKEditor;
+let CKEditors;
 let ClassicEditor;
 
 const CkEditor = ({setValue, data}) => {
@@ -12,7 +12,7 @@ const CkEditor = ({setValue, data}) => {
         if (typeof window === 'undefined') {
             setLoading(true);
         }else{
-            CKEditor = require( '@ckeditor/ckeditor5-react' ).CKEditor;
+            CKEditors = require( '@ckeditor/ckeditor5-react' ).CKEditor;
             ClassicEditor = require("@ckeditor/ckeditor5-build-classic");
             setLoading(false);
         }
@@ -39,7 +39,7 @@ const CkEditor = ({setValue, data}) => {
     return (
         <Container className="CkEditor">
             <div className={`activeCustom`}>
-                {CKEditor?<CKEditor
+                {CKEditors?<CKEditors
                     height={100}
                     editor={ ClassicEditor }
                     config={ configuration }

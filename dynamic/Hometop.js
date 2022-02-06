@@ -116,10 +116,10 @@ const Container = styled.div`
     }
     .user_profile{
         width:100%;
-        height:100%;
+        height:99%;
         position:relative;
         .user_image{
-            width:110%;
+            width:100%;
             display:flex;
             position:absolute;
             left:-170px;
