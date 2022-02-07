@@ -33,7 +33,6 @@ const MyApp = ({ Component, pageProps, router  }) =>{
         </MenuProvider>
       </ThemeProvider>
     </ConfigProvider>
-    
   )
 }
 

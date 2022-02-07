@@ -21,7 +21,7 @@ const CkEditor = ({setValue, data}) => {
 
     // const UploadHandle = (e) =>{
     //     if(e.target.files.length!==0){
-    //         let file = e.target.files[0];
+    //         let file = e.target.files[0];completelyLoaded
     //         const data = new FormData();
     //         data.append("files", file );
     //         axios.post(`${process.env.serverUrl}/upload`, data, { headers: {
@@ -34,7 +34,6 @@ const CkEditor = ({setValue, data}) => {
     //         })
     //     }
     // }
-
 
     return (
         <Container className="CkEditor">
