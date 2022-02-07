@@ -10,7 +10,8 @@ const Footer = () => {
             <div className="container content_parent">
 
                 <div className="col_items">
-                    <div className="title">End icon Description</div>
+                    <div className="title">bagsh.info</div>
+                    <img src="/img/logo_main.png" alt="bagshinfo_logo" />
                 </div>
                 <div className="col_items">
                     <div className="title">Меню</div>
@@ -65,6 +66,9 @@ const Container = styled.div`
             justify-content:space-between;
             .col_items{
                 width:23%;
+                img{
+                    width:120px;
+                }
                 .content_sector{
                     .items{
                         margin-bottom:16px;

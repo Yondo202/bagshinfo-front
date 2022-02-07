@@ -52,7 +52,7 @@ const Signup = () => {
     const [ imageLoad, setImageLoad ] = useState(false);
     const [ imageLoad2, setImageLoad2 ] = useState(false);
 
-    const [ userId, setUserId ] = useState(null)
+    const [ profileId, setProfileId ] = useState(null)
 
     const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch, setError } = useForm({
         defaultValues: {
@@ -107,27 +107,29 @@ const Signup = () => {
         const image = new FormData();
         image.append("files", file.file.originFileObj);
         axios.post(`/upload`, image).then(res=>{
-        axios.put(`/users/${userId}`, { [name]: res?.data[0]?.id }, { headers: { Authorization: `bearer ${jwt}` }}  )
-        setValue(name, res?.data[0])
-        if(name==="profile_image"){
-            setImageLoad(false)
-        }else if(name==="cover_image"){
-            setImageLoad2(false)
-        }
 
+            axios.put(`/profiles/${profileId}`, {data: { [name]: res?.data[0]?.id }}, { headers: { Authorization: `bearer ${jwt}` }}  ).then(_=>{
+                setValue(name, res?.data[0])
+                if(name==="profile_image"){
+                    setImageLoad(false)
+                }else if(name==="cover_image"){
+                    setImageLoad2(false)
+                }
+            })
+            
         }).catch(err=>{
             console.log('err', err);
         })
     }
 
-    const onSubmit = data => {
+    const onSubmit =_=> {
         if(state.password_again !== state.password){
             setError('password_again', { message: "Нууц үг адил биш байна", })
         }else if (state.password.length < 8){
             setError('password', { message: "Нууц үг 8 аас дээш оронтой байх ёстой!", })
         }else{
             NProgress.start()
-            SignFirst(data)
+            SignFirst(state)
         }
     };
 
@@ -135,7 +137,7 @@ const Signup = () => {
     const onSubmitStep2 =_=> {
         if(!imageLoad && !imageLoad2){
             NProgress.start()
-            axios.put(`/users/${userId}`, { short_presentation: state.short_presentation }, { headers: { Authorization: `bearer ${jwt}` } }   ).then(_=>{
+            axios.put(`/profiles/${profileId}`, { data:{ short_presentation: state.short_presentation } }, { headers: { Authorization: `bearer ${jwt}` } } ).then(_=>{
                 setStep(2)
                 NProgress.done()
             })
@@ -145,22 +147,48 @@ const Signup = () => {
 
     const SignFirst = async (data) => {
         try{
-            let res = await axios.post(`/auth/local/register`, {...data, role:'teacher', username: `${state.last_name.slice(0,1)}. ${state.first_name}` })
-            setUserId(res.data.user?.id)
+            let res = await axios.post(`/auth/local/register`, {...data, teacher:true, username: `${state.last_name.slice(0,1)}. ${state.first_name}` })
+            
+            try{
+                let pro = await axios.post(`/profiles`, { data: { ...data, user:res.data.user?.id, username: `${state.last_name.slice(0,1)}. ${state.first_name}`} } )
 
-            setCookie( null, 'jwt', res.data.jwt, {
-                maxAge: 30 * 24 * 60 * 60,
-                path: '/',
-                // encode:'jwt'
-            })
+                setProfileId(pro.data.data?.id)
+                setCookie( null, 'jwt', res.data.jwt, {
+                    maxAge: 30 * 24 * 60 * 60,
+                    path: '/',
+                })
+                AlertMessage(`Амжилттай бүртгэгдлээ`, 'success')
+                setStep(1)
+                window.scrollTo(0, 0);
 
-            AlertMessage(`Амжилттай бүртгэгдлээ`, 'success')
-            setStep(1)
-            window.scrollTo(0, 0);
+                
+
+            }catch(err){
+                await axios.delete( `/users/${res.data.user?.id}`, { headers: { Authorization: `bearer ${res.data.jwt}` } } )
+
+                if( err?.response?.data?.error?.message.includes('unique') ){
+                    AlertMessage(`Бүртгэгдсэн Дугаар байна `, 'warning')
+                    setError('phone', { message: "Давхцсан", })
+                    return
+                }else{
+                    AlertMessage(`Хүсэлт амжилтгүй`, 'warning')
+                }
+            }
+
+            // setProfileId(res.data.user?.id)
+
+            // setCookie( null, 'jwt', res.data.jwt, {
+            //     maxAge: 30 * 24 * 60 * 60,
+            //     path: '/',
+            // })
+
+            // AlertMessage(`Амжилттай бүртгэгдлээ`, 'success')
+            // setStep(1)
+            // window.scrollTo(0, 0);
         }catch(err){
             if ( err?.response?.data?.error?.message === "Email is already taken" ){
                 setError('email', { message: "Email хаяг давхцаж байна", })
-                AlertMessage(`Email хаяг давхцаж байна`, 'warning')
+                AlertMessage(`Бүртгэгдсэн Email хаяг байна`, 'warning')
                 return
             }else if( err?.response?.data?.error?.message.includes('email') ){
                 AlertMessage(`Хүсэлт амжилтгүй`, 'warning')
@@ -180,11 +208,10 @@ const Signup = () => {
     }
 
     const onChangeHandle = (name, value ) =>{
-        setValue(name, value)
+        setValue(name,name=== 'phone'? parseInt(value) : value)
         clearErrors()
     }
 
-    console.log('state', state);
 
   return( 
     <Container className="container" page={step}>
