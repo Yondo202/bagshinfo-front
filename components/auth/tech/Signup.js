@@ -47,7 +47,7 @@ function beforeUpload(file) {
 
 const Signup = () => {
     const { jwt } = parseCookies();
-    const [ step, setStep ] = useState(0);
+    const [ step, setStep ] = useState(2);
     const [ lessons, setLessons ] = useState([])
     const [ imageLoad, setImageLoad ] = useState(false);
     const [ imageLoad2, setImageLoad2 ] = useState(false);
@@ -212,6 +212,19 @@ const Signup = () => {
         clearErrors()
     }
 
+    const [ resultLoc, setResultLoc ] = useState([])
+
+    const SearchHandle = async e =>{
+        console.log('e.target.name', e.target.name);
+        console.log('e.target.name', e.target.value);
+        let result = await axios.get(`https://lhc8fpj94l.execute-api.ap-southeast-1.amazonaws.com/prod/searchaddr?district=&address=${e.target.value}`)
+        if(result.data !== "error"){
+            setResultLoc(result.data)
+        }else{
+            setResultLoc([])
+        }
+        console.log('result', result);
+    }
 
   return( 
     <Container className="container" page={step}>
@@ -339,10 +352,13 @@ const Signup = () => {
                                 { ...register('lessons', { required: '1 буюу түүнээс дээш хичээл сонгоно уу' }) }
                                 className={errors.lessons?.message?`err_style`:``}
                                 value={state.lessons}
-
+                                showSearch
                                 size="large"
                                 mode="multiple"
                                 placeholder="- Сонго -"
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
                                 onChange={(value, option) => { onChangeHandle( 'lessons', value, 'many' ) }}
                             >
                                 {lessons.map((el,ind)=>{
@@ -438,6 +454,26 @@ const Signup = () => {
                         <MainButtonStyle className="custom">Хадгалах <BsArrowRight /></MainButtonStyle>
                     </form>
 
+                    <div className="inputs_body">
+                        <div className="custom_row">
+
+                            <div className="input_par">
+                                <div className="label">Байршил хайх</div>
+                                <input onChange={SearchHandle} className="my_inp" type="text" />
+
+                                <div className='result_par'>
+                                    {resultLoc.map((el,ind)=>{
+                                        return(
+                                            <div>{el.full_address}</div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                        </div>
+                        <MainButtonStyle className="custom">Хадгалах <BsArrowRight /></MainButtonStyle>
+                    </div>
+
                 </div>
 
                 
@@ -491,6 +527,27 @@ const Container = styled.div`
                 width:100%;
                 margin-bottom:24px;
                 position:relative;
+                .my_inp{
+                    width:100%;
+                    outline:none;
+                    border:1px solid rgba(0,0,0,0.2);
+                    padding:4px 10px;
+                    color:${props=>props.theme.textColor};
+                    border-radius:3px;
+                    &:focus{
+                        border-color:${props=>props.theme.textColor3};
+                    }
+                }
+                .result_par{
+                    position:absolute;
+                    top:110%;
+                    left:0;
+                    width:100%;
+                    z-index:3;
+                    border:1px solid #000;
+                    padding:10px 10px;
+                    background-color:#fff;
+                }
                 .err_text{
                     position:absolute;
                     top:105%;
