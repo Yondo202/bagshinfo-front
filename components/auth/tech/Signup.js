@@ -214,10 +214,15 @@ const Signup = () => {
 
     const [ resultLoc, setResultLoc ] = useState([])
 
+    const config = {
+        headers: {
+            "Referer": "https://www.scrapingbee.com/",
+        },
+    };
+
     const SearchHandle = async e =>{
         console.log('e.target.name', e.target.name);
         console.log('e.target.name', e.target.value);
-        let result = await axios.get(`https://lhc8fpj94l.execute-api.ap-southeast-1.amazonaws.com/prod/searchaddr?district=&address=${e.target.value}`)
         if(result.data !== "error"){
             setResultLoc(result.data)
         }else{
@@ -455,7 +460,7 @@ const Signup = () => {
                     </form>
 
                     <div className="inputs_body">
-                        <div className="custom_row">
+                        {/* <div className="custom_row"> */}
 
                             <div className="input_par">
                                 <div className="label">Байршил хайх</div>
@@ -470,7 +475,18 @@ const Signup = () => {
                                 </div>
                             </div>
 
-                        </div>
+                            {/* <div className="input_par">
+                                <div className="label">Газрын зураг дээр сонгох</div>
+                                
+                            </div> */}
+
+                            <div className="gmail_botton">
+                                <img src="/img/maps_icon.svg" alt='bagshinfo' />
+                                <span>Емэйл - ээр нэвтрэх</span>
+                            </div>
+
+                        {/* </div> */}
+
                         <MainButtonStyle className="custom">Хадгалах <BsArrowRight /></MainButtonStyle>
                     </div>
 
@@ -501,6 +517,7 @@ const Container = styled.div`
                 max-width: 100%;
                 width: 100%;
             }
+            
             .slice_par{
                 display:grid;
                 grid-auto-flow:column;
@@ -515,6 +532,23 @@ const Container = styled.div`
                     transform:translateX(-${props=>props.page}00%);
                     width:100%;
                     height:100%;
+
+                    .gmail_botton{
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        border: 1px solid rgba(0,0,0,0.1);
+                        padding: 16px 20px;
+                        font-weight:${props=>props.theme.weight};
+                        cursor:pointer;
+                        transition:all 0.2s ease;
+                        img{
+                            width:50px;
+                        }
+                        &:hover{
+                            border: 1px solid #c4c6ca;
+                        }
+                    }
                 }
                 
             }
