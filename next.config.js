@@ -2,15 +2,6 @@
 //   reactStrictMode: true,
 // }
 
-
-// module.exports = {
-//   env: {
-//       serverUrl: 'http://192.168.10.88:1357',
-//       // serverUrl: 'https://admin-loccitane.tavanbogd.com',
-//       frontUrl: 'https://loccitane.tavanbogd.com'
-//   }
-// }
-
 const { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } = require("next/constants");
 
 module.exports = (phase) => {
