@@ -4,12 +4,14 @@ import Hometop from '@/dynamic/Hometop'
 import Categorycards from '@/dynamic/Categorycards'
 import Menucards from '@/dynamic/Menucards'
 
+
 const Index = () => {
   return (
       <Root>
-          <Hometop />
+          <Hometop /> 
           <Menucards />
           <Categorycards />
+
       </Root>
   )
 }

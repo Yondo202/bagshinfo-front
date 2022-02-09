@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { setCookie, parseCookies } from "nookies";
 import styled from 'styled-components';
 import Link from "next/link"
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
-import { BsArrowRight, BsCardImage } from "react-icons/bs"
+import { BsArrowRight } from "react-icons/bs"
 // import { IoMdAdd } from "react-icons/io"
 import { RiImageAddFill } from "react-icons/ri"
 import { useForm } from "react-hook-form"
@@ -16,6 +15,7 @@ import AlertMessage from '@/miscs/AlertMessage';
 const { Option } = Select
 import CkEditor from "@/miscs/CKeditor"
 import NProgress from 'nprogress';
+import Stepmap from '@/components/auth/tech/Stepmap';
 
 
 // const initial = 
@@ -54,7 +54,7 @@ const Signup = () => {
 
     const [ profileId, setProfileId ] = useState(null)
 
-    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, trigger, watch, setError } = useForm({
+    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, watch, setError } = useForm({
         defaultValues: {
             last_name: null, // овог
             first_name: null,
@@ -212,26 +212,10 @@ const Signup = () => {
         clearErrors()
     }
 
-    const [ resultLoc, setResultLoc ] = useState([])
+    
 
-    const config = {
-        headers: {
-            "Referer": "https://www.scrapingbee.com/",
-        },
-    };
-
-    const SearchHandle = async e =>{
-        console.log('e.target.name', e.target.name);
-        console.log('e.target.name', e.target.value);
-        if(result.data !== "error"){
-            setResultLoc(result.data)
-        }else{
-            setResultLoc([])
-        }
-        console.log('result', result);
-    }
-
-  return( 
+  return(
+    <>
     <Container className="container" page={step}>
         <div className="header">
             <Link href="/">
@@ -356,7 +340,7 @@ const Signup = () => {
                             <Select
                                 { ...register('lessons', { required: '1 буюу түүнээс дээш хичээл сонгоно уу' }) }
                                 className={errors.lessons?.message?`err_style`:``}
-                                value={state.lessons}
+                                value={state?.lessons}
                                 showSearch
                                 size="large"
                                 mode="multiple"
@@ -366,7 +350,7 @@ const Signup = () => {
                                 }
                                 onChange={(value, option) => { onChangeHandle( 'lessons', value, 'many' ) }}
                             >
-                                {lessons.map((el,ind)=>{
+                                {lessons?.map((el,ind)=>{
                                     return(
                                         <Option value={el.id} name="lessons" key={ind}>
                                             {el.attributes.name}
@@ -459,46 +443,13 @@ const Signup = () => {
                         <MainButtonStyle className="custom">Хадгалах <BsArrowRight /></MainButtonStyle>
                     </form>
 
-                    <div className="inputs_body">
-                        {/* <div className="custom_row"> */}
-
-                            <div className="input_par">
-                                <div className="label">Байршил хайх</div>
-                                <input onChange={SearchHandle} className="my_inp" type="text" />
-
-                                <div className='result_par'>
-                                    {resultLoc.map((el,ind)=>{
-                                        return(
-                                            <div>{el.full_address}</div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* <div className="input_par">
-                                <div className="label">Газрын зураг дээр сонгох</div>
-                                
-                            </div> */}
-
-                            <div className="gmail_botton">
-                                <img src="/img/maps_icon.svg" alt='bagshinfo' />
-                                <span>Емэйл - ээр нэвтрэх</span>
-                            </div>
-
-                        {/* </div> */}
-
-                        <MainButtonStyle className="custom">Хадгалах <BsArrowRight /></MainButtonStyle>
-                    </div>
-
+                    <Stepmap />
                 </div>
-
-                
-                
-                
             </div>
-
         </div>
     </Container>
+
+    </>
   )
 };
 
@@ -562,25 +513,24 @@ const Container = styled.div`
                 margin-bottom:24px;
                 position:relative;
                 .my_inp{
-                    width:100%;
-                    outline:none;
-                    border:1px solid rgba(0,0,0,0.2);
-                    padding:4px 10px;
-                    color:${props=>props.theme.textColor};
-                    border-radius:3px;
-                    &:focus{
-                        border-color:${props=>props.theme.textColor3};
+                    font-weight:${props=>props.theme.weight};
+                    border: 1px solid #d8d9dc;
+                    border-radius: 0;
+                    background: #fff;
+                    font-size: 14px;
+                    color: #455065;
+                    padding: 20px;
+                    transition: all .2s;
+                    width: 100%;
+                    outline: none;
+                    -webkit-appearance: none;
+                    margin-bottom:20px;
+                    ::placeholder{
+                        color:${props=>props.theme.textColor4};
                     }
-                }
-                .result_par{
-                    position:absolute;
-                    top:110%;
-                    left:0;
-                    width:100%;
-                    z-index:3;
-                    border:1px solid #000;
-                    padding:10px 10px;
-                    background-color:#fff;
+                    &:focus{
+                        border: 1px solid ${props=>props.theme.textColor3};
+                    }
                 }
                 .err_text{
                     position:absolute;
