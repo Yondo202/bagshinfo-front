@@ -1,6 +1,15 @@
 @import 'antd/dist/antd.css';
+
+@font-face {
+    font-family: SFProDisplay;
+    src: url("../../miscs/fonts/SFpro/SF-Pro-Text-Regular.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
 body{
-    font-family: 'Montserrat', sans-serif;
+    /* font-family: 'Montserrat', sans-serif; */
+    font-family: 'SFProDisplay', sans-serif;
     font-size: 13px;
     scroll-behavior: smooth;
     /* font-family: 'Rubik', sans-serif; */

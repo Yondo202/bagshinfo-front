@@ -47,7 +47,7 @@ function beforeUpload(file) {
 
 const Signup = () => {
     const { jwt } = parseCookies();
-    const [ step, setStep ] = useState(2);
+    const [ step, setStep ] = useState(0);
     const [ lessons, setLessons ] = useState([])
     const [ imageLoad, setImageLoad ] = useState(false);
     const [ imageLoad2, setImageLoad2 ] = useState(false);
@@ -157,6 +157,10 @@ const Signup = () => {
                     maxAge: 30 * 24 * 60 * 60,
                     path: '/',
                 })
+                // setCookie( null, 'jwt', pro.data.data?.id, {
+                //     maxAge: 30 * 24 * 60 * 60,
+                //     path: '/',
+                // })
                 AlertMessage(`Амжилттай бүртгэгдлээ`, 'success')
                 setStep(1)
                 window.scrollTo(0, 0);
@@ -440,10 +444,14 @@ const Signup = () => {
                         </div>
 
                         
-                        <MainButtonStyle className="custom">Хадгалах <BsArrowRight /></MainButtonStyle>
+                        <div className="final_buttons">
+                            <MainButtonStyle type="button" color="false" onClick={_=>setStep(2)} className="custom">Алгасах <BsArrowRight /></MainButtonStyle>
+                            <MainButtonStyle className="custom">Хадгалах </MainButtonStyle>
+                        </div>
+
                     </form>
 
-                    <Stepmap />
+                    <Stepmap profileId={profileId} jwt={jwt} />
                 </div>
             </div>
         </div>
@@ -498,6 +506,14 @@ const Container = styled.div`
                         }
                         &:hover{
                             border: 1px solid #c4c6ca;
+                        }
+                    }
+                    .final_buttons{
+                        display:flex;
+                        gap:50px;
+                        button{
+                            padding: 8px 0px;
+                            margin: 18px 0px;
                         }
                     }
                 }
