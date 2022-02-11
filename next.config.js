@@ -17,12 +17,12 @@ module.exports = (phase) => {
         // user: "user_info",w
         serverUrl:(()=>{
             if(isDev) return 'http://localhost:1331'
-            // if(isProd) return 'https://4708-124-158-107-34.ngrok.io'
+            if(isProd) return 'https://b4af-124-158-107-34.ngrok.io'
             // if(isSTaging) return 'https://4708-124-158-107-34.ngrok.io'
         })(),
         frontUrl:(()=>{
             if(isDev) return 'http://localhost:3000'
-            // if(isProd) return 'https://e-shop-front.vercel.app'
+            if(isProd) return 'https://bagshinfo.vercel.app'
             // if(isSTaging) return 'https://e-shop-front.vercel.app'
         })(),
         productUrl:(()=>{
