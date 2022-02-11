@@ -147,7 +147,7 @@ const Signup = () => {
 
     const SignFirst = async (data) => {
         try{
-            let res = await axios.post(`/auth/local/register`, {...data, teacher:true, username: `${state.last_name.slice(0,1)}. ${state.first_name}` })
+            let res = await axios.post(`/auth/local/register`, {...data, teacher:true, username: state.first_name })
             
             try{
                 let pro = await axios.post(`/profiles`, { data: { ...data, user:res.data.user?.id, username: `${state.last_name.slice(0,1)}. ${state.first_name}`} } )

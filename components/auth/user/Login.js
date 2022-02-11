@@ -1,11 +1,60 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from "next/link"
-import Image from "next/image"
+import { useForm } from "react-hook-form"
+import { setCookie } from "nookies";
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
 import axios from '@/global/axiosbase';
+import NProgress from 'nprogress';
+import AlertMessage from '@/miscs/AlertMessage';
+import Router from 'next/router'
 
 const Login = () => {
+    const { register, handleSubmit, formState: { errors }, clearErrors, reset, setValue, watch, setError } = useForm({
+        defaultValues: {
+            identifier: null,
+            password: null
+        }
+    });
+    const state = watch()
+
+    const onSubmit =_=> {
+        console.log(state)
+        NProgress.start()
+        axios.post(`/auth/local`, state ).then(res=>{
+            console.log(`res`, res)
+            setCookie( null, 'jwt', res.data.jwt, {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/',
+            })
+
+            setCookie( null, 'user_id', res.data.user?.id, {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/',
+            })
+
+            setCookie( null, 'username', res.data.user?.username, {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/',
+            })
+
+            AlertMessage('Амжилттай нэвтэрлээ', 'success')
+            Router.push('/')
+
+        }).catch(_=>{
+            AlertMessage('Нэвтрэх нэр юмуу нууц үг буруу байна!', 'warning')
+        }).finally(_=>{
+            NProgress.done()
+        })
+    };
+
+    
+
+    const onChangeHandle = ( name, e) =>{
+        setValue(name, e)
+        clearErrors()
+    }
+
 
   return( 
     <Container className="container">
@@ -19,11 +68,31 @@ const Login = () => {
         
 
         <div className="bodys">
-            <div className="main_content">
+            <form onSubmit={handleSubmit(onSubmit)} className="main_content">
                 <div className="title">Нэвтрэх</div>
+                <div className="inp_par">
+                    <input
+                        { ...register('identifier', { required: 'Email - ээ оруулна уу' }) }
+                        type="email"
+                        onChange={e=>onChangeHandle('identifier', e.target.value)}
 
-                <input placeholder="Емэйл ээр нэвтэрнэ үү " className="my_inp" />
-                <input placeholder="Нууц үг" className="my_inp" />
+                        className={errors.identifier?.message?`my_inp err_style`:`my_inp`}
+                        placeholder="Емэйл ээр нэвтэрнэ үү "
+                    />
+                    {errors.identifier?.message&&<span className="err_text">{errors.identifier?.message}</span>}
+                </div>
+
+                <div className="inp_par">
+                    <input 
+                        { ...register('password', { required: 'Нууц үгээ оруулна уу' }) }
+                        type="text"
+                        onChange={e=>onChangeHandle('password', e.target.value)}
+                        className={errors.password?.message?`my_inp err_style`:`my_inp`}
+                        placeholder="Нууц үг" 
+                    />
+                    {errors.password?.message&&<span className="err_text">{errors.password?.message}</span>}
+                </div>
+                
 
                 <div className="custom_handle"></div>
                 <MainButtonStyle className="custom">Нэвтрэх</MainButtonStyle>
@@ -36,7 +105,7 @@ const Login = () => {
                     <img src="https://assets.toptal.io/assets/front/static/platform/icons/social/google_30739e.svg" alt='bagshinfo' />
                     <span>Емэйл - ээр нэвтрэх</span>
                 </div>
-            </div>
+            </form>
 
         </div>
     </Container>
@@ -96,26 +165,42 @@ const Container = styled.div`
                 width:100%;
                 padding:17px 0px;
             }
-            .my_inp{
-                font-weight:${props=>props.theme.weight};
-                border: 1px solid #d8d9dc;
-                border-radius: 0;
-                background: #fff;
-                font-size: 14px;
-                color: #455065;
-                padding: 20px;
-                transition: all .2s;
-                width: 100%;
-                outline: none;
-                -webkit-appearance: none;
-                margin-bottom:20px;
-                ::placeholder{
-                    color:${props=>props.theme.textColor4};
+            .inp_par{
+                margin-bottom:30px;
+                position:relative;
+                .my_inp{
+                    font-weight:${props=>props.theme.weight};
+                    border: 1px solid #d8d9dc;
+                    border-radius: 0;
+                    background: #fff;
+                    font-size: 14px;
+                    color: #455065;
+                    padding: 20px;
+                    transition: all .2s;
+                    width: 100%;
+                    outline: none;
+                    -webkit-appearance: none;
+                    ::placeholder{
+                        color:${props=>props.theme.textColor4};
+                    }
+                    &:focus{
+                        border: 1px solid ${props=>props.theme.textColor3};
+                    }
                 }
-                &:focus{
-                    border: 1px solid ${props=>props.theme.textColor3};
+                .err_style{
+                    border:1px solid #dc3c1e !important;
+                    color:#dc3c1e !important;
+                }
+                .err_text{
+                    position:absolute;
+                    top:105%;
+                    right:0;
+                    font-size:11px;
+                    color:red;
+                    font-weight:${props=>props.theme.weight};
                 }
             }
+            
             .title{
                 font-size:28px;
                 color:${props=>props.theme.textColor};

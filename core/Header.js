@@ -1,14 +1,24 @@
 import React, { useEffect, useState  } from 'react'
 import styled from 'styled-components'
 import {  MainButtonStyle } from "@/miscs/CustomStyle"
+import { parseCookies } from "nookies";
 import Link from "next/link"
 
 const Header = () => {
+    const { username } = parseCookies();
     const [scrollY, setScrollY] = useState(0);
+    const [ name, setName ] = useState('')
+    
+    useEffect(()=>{
+        if(username){
+            setName(username)
+        }
+    },[])
 
     function logit() {
         setScrollY(window.pageYOffset);
     }
+
     useEffect(() => {
         function watchScroll() {
         window.addEventListener("scroll", logit);
@@ -18,7 +28,6 @@ const Header = () => {
         window.removeEventListener("scroll", logit);
         };
     }, []);
-
 
     return (
         <Parent >
@@ -40,19 +49,28 @@ const Header = () => {
                         </div>
                     </div>
 
-                    <div className="left_sector">
-                        <div className="menu_par">
-                            <Link href="/auth/user/login">
-                                <a>
-                                    <MainButtonStyle type="button">Нэвтрэх</MainButtonStyle>
-                                </a>
-                            </Link>
-                            <Link href="/auth/tech/signup">
-                                <a className="menus">Багшаар бүртгүүлэх</a>
-                            </Link>
-                            
+
+                    {name !== ''
+                        ?<div className="left_sector">
+                            <div className="profile_icon">{name?.slice(0,1)}</div>
                         </div>
-                    </div>
+                        :
+                        <div className="left_sector">
+                            <div className="menu_par">
+                                <Link href="/auth/user/login">
+                                    <a>
+                                        <MainButtonStyle type="button">Нэвтрэх</MainButtonStyle>
+                                    </a>
+                                </Link>
+                                <Link href="/auth/tech/signup">
+                                    <a className="menus">Багшаар бүртгүүлэх</a>
+                                </Link>
+                                
+                            </div>
+                        </div>
+                    }
+
+                    
                 </div>
             </Container>
         </Parent>
@@ -124,8 +142,10 @@ const Container = styled.div`
                         width:100%;
                     }
                 }
+               
             }
         }
+      
         
         .left_sector{
             height:100%;
@@ -138,6 +158,31 @@ const Container = styled.div`
                     width:90px;
                     height:auto;
                     object-fit:contain;
+                }
+            }
+            .profile_icon{
+                background-color:#fff;
+                width:35px;
+                height:35px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                border-radius:50%;
+                font-weight:bold;
+                font-size:20px;
+                color:${props=>props.theme.textColor3};
+                cursor:pointer;
+                padding-bottom:4px;
+                position:relative;
+                &:after{
+                    content:'';
+                    position:absolute;
+                    bottom:1px;
+                    right:2px;
+                    background-color:${props=>props.theme.mainColor2};
+                    height:7px;
+                    width:7px;
+                    border-radius:50%;
                 }
             }
         }
