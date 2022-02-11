@@ -147,10 +147,10 @@ const Stepmap = ({ profileId, jwt}) => {
                 // onOk={this.handleOk}
                 onCancel={_=>setShowModal(false)}
                 footer={[
-                    <ModalButton>
+                    <ModalButton key="button">
                         <MainButtonStyle onClick={_=>{setShowModal(false), setShowMap(true) }} icon="left" color="false" className="custom2">Газрын зураг дээр тэмдэглэх</MainButtonStyle>
                         <MainButtonStyle onClick={_=>setShowModal(false)} icon="left" className="custom2">Байршлаар хайх</MainButtonStyle>
-                    </ModalButton>
+                    </ModalButton>,
                 ]}
                 >
             </Modal>
