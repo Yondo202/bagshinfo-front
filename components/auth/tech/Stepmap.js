@@ -94,13 +94,15 @@ const Stepmap = ({ profileId, jwt}) => {
                         <div className="label">Байршил хайх</div>
                         <input onBlur={blurHandle} placeholder="хайх..." value={searchText.text} onChange={SearchHandle} className="my_inp" type="text" />
 
-                        {(resultLoc.length) ?<OutsideClickHandler
+                        {resultLoc.length !== 0 ?<OutsideClickHandler
                             onOutsideClick={_=> OutsideClick()}
                         >
                         <div className='result_par'>
                             { resultLoc.map((el,ind)=>{
                                 return(
-                                    <div className="list" onClick={_=>SelectHandle(el)} key={ind}>{el.full_address}</div>
+                                    <div key={ind} className="list" onClick={_=>SelectHandle(el)}>
+                                        {el.full_address}
+                                    </div>
                                 )
                             }) }
                         </div>
